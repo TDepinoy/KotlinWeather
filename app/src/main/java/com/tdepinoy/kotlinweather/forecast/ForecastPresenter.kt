@@ -4,24 +4,30 @@ import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.instance
 import com.tdepinoy.kotlinweather.core.api.WeatherApi
 import com.tdepinoy.kotlinweather.core.model.Forecast
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.schedulers.Schedulers
 
 class ForecastPresenter(val kodein: Kodein, val view: ForecastContract.View) : ForecastContract.Presenter {
 
     val weatherApi: WeatherApi = kodein.instance()
 
     override fun fetchForecast() {
-        weatherApi.dailyForecast("94043").enqueue(object : Callback<Forecast> {
+        weatherApi.dailyForecast("94043")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableObserver<Forecast>() {
+                    override fun onNext(t: Forecast?) {
+                        view.bindForecast(t!!)
+                    }
 
-            override fun onFailure(call: Call<Forecast>?, t: Throwable?) {
-                view.showError()
-            }
+                    override fun onError(e: Throwable?) {
+                        view.showError()
+                    }
 
-            override fun onResponse(call: Call<Forecast>?, response: Response<Forecast>?) {
-                view.bindForecast(response!!.body()!!)
-            }
-        })
+                    override fun onComplete() {
+
+                    }
+                })
     }
 }

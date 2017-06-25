@@ -7,6 +7,7 @@ import com.tdepinoy.kotlinweather.core.api.WeatherApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 class KotlinWeatherApp : Application(), KodeinAware {
@@ -47,6 +48,7 @@ class KotlinWeatherApp : Application(), KodeinAware {
                     .client(client)
                     .baseUrl(BuildConfig.API_ENDPOINT)
                     .addConverterFactory(MoshiConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build()
         }
 
