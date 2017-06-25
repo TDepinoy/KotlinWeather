@@ -19,8 +19,8 @@ class ForecastActivity : AppCompatActivity(), ForecastContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forecast)
-        presenter = ForecastPresenter(kodein.invoke(), this)
         forecast_recycler_view.layoutManager = LinearLayoutManager(this)
+        presenter = ForecastPresenter(kodein.invoke(), this)
         presenter.fetchForecast()
     }
 

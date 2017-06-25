@@ -1,7 +1,7 @@
 package com.tdepinoy.kotlinweather
 
 import android.app.Application
-import android.util.Log
+import com.github.ajalt.timberkt.Timber
 import com.github.salomonbrys.kodein.*
 import com.tdepinoy.kotlinweather.core.api.WeatherApi
 import okhttp3.OkHttpClient
@@ -18,7 +18,7 @@ class KotlinWeatherApp : Application(), KodeinAware {
     override val kodein by Kodein.lazy {
 
         bind<OkHttpClient>() with singleton {
-            val loggingInterceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { message -> Log.d("OkHttp", message) })
+            val loggingInterceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { message -> Timber.d { "OkHttp $message" } })
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
             OkHttpClient.Builder()
