@@ -15,6 +15,13 @@ class KotlinWeatherApp : Application(), KodeinAware {
         val API_KEY_QUERY_PARAMETER = "APPID"
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        if (BuildConfig.DEBUG) {
+            Timber.plant(timber.log.Timber.DebugTree())
+        }
+    }
+
     override val kodein by Kodein.lazy {
 
         bind<OkHttpClient>() with singleton {
