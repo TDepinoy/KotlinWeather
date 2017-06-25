@@ -5,7 +5,6 @@ import com.github.salomonbrys.kodein.instance
 import com.tdepinoy.kotlinweather.core.api.WeatherApi
 import com.tdepinoy.kotlinweather.core.model.Forecast
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 
 class ForecastPresenter(val kodein: Kodein, val view: ForecastContract.View) : ForecastContract.Presenter {
@@ -16,18 +15,14 @@ class ForecastPresenter(val kodein: Kodein, val view: ForecastContract.View) : F
         weatherApi.dailyForecast("94043")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableObserver<Forecast>() {
-                    override fun onNext(t: Forecast?) {
-                        view.bindForecast(t!!)
-                    }
-
-                    override fun onError(e: Throwable?) {
-                        view.showError()
-                    }
-
-                    override fun onComplete() {
-
-                    }
-                })
+                .subscribe(
+                        {
+                            forecast: Forecast ->
+                            view.bindForecast(forecast)
+                        },
+                        {
+                            view.showError()
+                        }
+                )
     }
 }
