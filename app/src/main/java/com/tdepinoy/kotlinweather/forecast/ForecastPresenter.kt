@@ -5,7 +5,7 @@ import com.tdepinoy.kotlinweather.core.model.Forecast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class ForecastPresenter(val view: ForecastContract.View, val weatherApi: WeatherApi) : ForecastContract.Presenter {
+class ForecastPresenter(private val view: ForecastContract.View, private val weatherApi: WeatherApi) : ForecastContract.Presenter {
 
 
     override fun fetchForecast() {
