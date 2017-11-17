@@ -4,6 +4,8 @@ import android.app.Application
 import com.github.ajalt.timberkt.Timber
 import com.github.salomonbrys.kodein.*
 import com.tdepinoy.kotlinweather.core.api.WeatherApi
+import com.tdepinoy.kotlinweather.forecast.ForecastContract
+import com.tdepinoy.kotlinweather.forecast.ForecastPresenter
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -56,5 +58,7 @@ class KotlinWeatherApp : Application(), KodeinAware {
             val retrofit: Retrofit = instance()
             retrofit.create(WeatherApi::class.java)
         }
+
+        bind<ForecastContract.Presenter>() with factory { view: ForecastContract.View -> ForecastPresenter(view, instance()) }
     }
 }
